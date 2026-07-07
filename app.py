@@ -2,7 +2,7 @@
 import streamlit as st
 from jobspy import scrape_jobs
 
-st.title("Job Search Tool")
+st.title("My Job Search Tool")
 
 search_keyword = st.text_input("Enter Job Title:")
 location = st.text_input("Enter Location:")
