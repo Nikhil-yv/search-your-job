@@ -1,31 +1,26 @@
+
 import streamlit as st
 from jobspy import scrape_jobs
-import pandas as pd
 
 st.title("Job Search Tool")
+
 search_keyword = st.text_input("Enter Job Title:")
+location = st.text_input("Enter Location:")
 
-# Create buttons in a row
-col1, col2, col3 = st.columns([1, 1, 2])
-with col1:
-    usa_btn = st.button("All Over USA")
-with col2:
-    remote_btn = st.button("Remote Only")
-
-# Dynamic location handling
-if usa_btn:
-    location = "USA"
-else:
-    location = st.text_input("Enter Location:")
+usa_only = st.checkbox("All Over USA")
+remote_only = st.checkbox("Remote Only")
 
 if st.button("Search"):
-    if search_keyword and (location or remote_btn):
+    if search_keyword and (location or usa_only or remote_only):
         with st.spinner('Searching...'):
+            
+            final_location = "USA" if usa_only else location
+            
             jobs = scrape_jobs(
                 site_name=["indeed", "linkedin"],
                 search_term=search_keyword,
-                location=location if not usa_btn else "USA",
-                is_remote=remote_btn,
+                location=final_location,
+                is_remote=remote_only,
                 country_indeed='USA',
                 results_wanted=20,
                 hours_old=72
@@ -46,4 +41,4 @@ if st.button("Search"):
                 use_container_width=True
             )
     else:
-        st.warning("Please enter a job title and select a location or remote option.")
+        st.warning("Please enter a job title and select a location or filtering option.")
