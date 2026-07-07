@@ -11,7 +11,7 @@ if st.button("Search"):
         with st.spinner('Searching...'):
 
             jobs = scrape_jobs(
-                site_name=["indeed", "linkedin", "zip_recruiter", "monster", "dice"],
+                site_name=["indeed", "linkedin", "glassdoor", "monster", "ziprecruiter", "careerbuilder", "simplyhired", "dice", "snagajob", "usajobs"],
                 search_term=search_keyword,
                 location=location,
                 results_wanted=20,
