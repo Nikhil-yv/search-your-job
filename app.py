@@ -18,6 +18,8 @@ if st.button("Search"):
                 results_wanted=20,
                 hours_old=72
             )
+            cols = ['title'] + [c for c in jobs.columns if c != 'title']
+            jobs = jobs[cols]
             st.success(f"Found {len(jobs)} jobs!")
             st.dataframe(
             jobs,
