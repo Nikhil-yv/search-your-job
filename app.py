@@ -19,7 +19,20 @@ if st.button("Search"):
                 hours_old=72
             )
             st.success(f"Found {len(jobs)} jobs!")
-            st.dataframe(jobs) # Display results in the app
+            st.dataframe(
+            jobs,
+            column_config={
+                "job_url": st.column_config.LinkColumn(
+                "Job URL",
+                display_text="View Job"
+            ),
+            "job_url_direct": st.column_config.LinkColumn(
+            "Direct URL",
+            display_text="Apply Here"
+        ),
+    },
+    hide_index=True
+)
             
             csv = jobs.to_csv(index=False).encode('utf-8')
             st.download_button("Download CSV", csv, "jobs.csv", "text/csv")
