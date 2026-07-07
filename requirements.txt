@@ -1,4 +1,4 @@
 streamlit
-jobspy
+python-jobspy
 pandas
 requests
