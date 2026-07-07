@@ -14,6 +14,7 @@ if st.button("Search"):
                 site_name=["indeed", "linkedin", "glassdoor", "google", "zip_recruiter"],
                 search_term=search_keyword,
                 location=location,
+                country_indeed='USA',
                 results_wanted=20,
                 hours_old=72
             )
