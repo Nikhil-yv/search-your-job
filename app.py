@@ -19,12 +19,19 @@ if st.button("Search"):
             jobs = scrape_jobs(
                 site_name=["indeed", "linkedin"],
                 search_term=search_keyword,
-                location=final_location,
-                is_remote=remote_only,
+                location="USA" if usa_only else location,
+                is_remote=remote_only, # Keep this, but know it might be imperfect
                 country_indeed='USA',
                 results_wanted=20,
                 hours_old=72
-            )
+        )
+
+        if remote_only and not jobs.empty:
+            remote_keywords = ['remote', 'telecommute', 'work from home', 'wfh']
+            jobs = jobs[
+                jobs['title'].str.contains('|'.join(remote_keywords), case=False, na=False) |
+                jobs['location'].str.contains('remote', case=False, na=False)
+            ]
             
             cols = ['title'] + [c for c in jobs.columns if c not in ['title', 'id']] + ['id']
             jobs = jobs[cols]
