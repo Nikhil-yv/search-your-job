@@ -39,6 +39,10 @@ if submitted:
                     hours_old=72
                 )
                 
+                if remote_only and not jobs.empty:
+                    if 'is_remote' in jobs.columns:
+                        jobs = jobs[jobs['is_remote'] == True]
+                
                 if not jobs.empty:
                     st.success(f"Found {len(jobs)} jobs!")
                     
