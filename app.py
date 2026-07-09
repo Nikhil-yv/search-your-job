@@ -1,44 +1,71 @@
-
 import streamlit as st
 from jobspy import scrape_jobs
 
-st.title("My Job Search Tool")
+# 1. Page Config
+st.set_page_config(page_title="Job Search Tool", page_icon="🔍", layout="wide")
 
-search_keyword = st.text_input("Enter Job Title:")
-location = st.text_input("Enter Location:")
+st.title("🔍 Job Search Tool")
+st.markdown("Find the latest job postings from top platforms.")
 
-usa_only = st.checkbox("All Over USA")
-remote_only = st.checkbox("Remote Only")
+# 2. Sidebar for Inputs
+with st.sidebar:
+    st.header("Filters")
+    with st.form("search_form"):
+        search_keyword = st.text_input("Job Title", placeholder="e.g. Data Scientist")
+        location = st.text_input("Location", placeholder="e.g. New York")
+        
+        col1, col2 = st.columns(2)
+        with col1:
+            usa_only = st.checkbox("All Over USA")
+        with col2:
+            remote_only = st.checkbox("Remote Only")
+        
+        submitted = st.form_submit_button("Search Jobs", type="primary")
 
-if st.button("Search"):
+# 3. Main Display Logic
+st.divider()
+
+if submitted:
     if search_keyword and (location or usa_only or remote_only):
-        with st.spinner('Searching...'):
+        with st.spinner('Scraping the latest jobs for you...'):
+            try:
+                final_location = "USA" if usa_only else location
+                
+                jobs = scrape_jobs(
+                    site_name=["indeed", "linkedin"],
+                    search_term=search_keyword,
+                    location=final_location,
+                    is_remote=remote_only,
+                    country_indeed='USA',
+                    results_wanted=20,
+                    hours_old=72
+                )
+                
+                if not jobs.empty:
+                    st.success(f"Found {len(jobs)} jobs!")
+                    
+                    # Clean up columns for display
+                    cols = ['title', 'company', 'location', 'job_url'] 
+                    display_df = jobs[[c for c in cols if c in jobs.columns]]
+                    
+                    st.dataframe(
+                        display_df,
+                        column_config={
+                            "job_url": st.column_config.LinkColumn("Apply", display_text="Open Link"),
+                        },
+                        hide_index=True,
+                        use_container_width=True
+                    )
+                else:
+                    st.info("No jobs found matching your criteria. Try adjusting your filters.")
             
-            final_location = "USA" if usa_only else location
-            
-            jobs = scrape_jobs(
-                site_name=["indeed", "linkedin"],
-                search_term=search_keyword,
-                location=final_location,
-                is_remote=remote_only,
-                country_indeed='USA',
-                results_wanted=20,
-                hours_old=72
-            )
-            
-            cols = ['title'] + [c for c in jobs.columns if c not in ['title', 'id']] + ['id']
-            jobs = jobs[cols]
-            
-            st.success(f"Found {len(jobs)} jobs!")
-            
-            st.dataframe(
-                jobs,
-                column_config={
-                    "job_url": st.column_config.LinkColumn("Job URL", display_text="View Job"),
-                    "job_url_direct": st.column_config.LinkColumn("Direct URL", display_text="Apply Here"),
-                },
-                hide_index=True,
-                use_container_width=True
-            )
+            except Exception as e:
+                st.error(f"An error occurred: {e}")
     else:
-        st.warning("Please enter a job title and select a location or filtering option.")
+        st.warning("Please provide a Job Title and a Location (or check USA/Remote).")
+
+st.markdown("---")
+st.markdown(
+    "<div style='text-align: center; color: grey;'>By Nikhil Elpula</div>", 
+    unsafe_allow_html=True
+)
