@@ -41,22 +41,27 @@ if submitted:
                 if not jobs.empty:
                     st.success(f"Found {len(jobs)} jobs!")
                     
-                    cols = ['title', 'company', 'location', 'min_amount', 'max_amount', 'is_remote', 'job_url'] 
+                    jobs['salary_range'] = jobs.apply(
+                        lambda row: f"${row['min_amount']:,.0f} - ${row['max_amount']:,.0f}" 
+                        if (row['min_amount'] and row['max_amount']) else "N/A", 
+                        axis=1
+                    )
+                    
+                    cols = ['title', 'company', 'location', 'salary_range', 'is_remote', 'job_url'] 
                     display_df = jobs[[c for c in cols if c in jobs.columns]]
                     
                     st.dataframe(
                         display_df,
                         column_config={
                             "job_url": st.column_config.LinkColumn("Apply", display_text="Open Link"),
-                            "min_amount": st.column_config.NumberColumn("Min Salary"),
-                            "max_amount": st.column_config.NumberColumn("Max Salary"),
+                            "salary_range": "Salary Range",
                             "is_remote": st.column_config.CheckboxColumn("Remote"),
                         },
                         hide_index=True,
                         use_container_width=True
                     )
                 else:
-                    st.info("No jobs found matching your criteria. Try adjusting your filters.")
+                    st.info("No jobs found matching your criteria.")
             
             except Exception as e:
                 st.error(f"An error occurred: {e}")
