@@ -1,5 +1,6 @@
 import streamlit as st
 from jobspy import scrape_jobs
+import pandas as pd
 
 st.set_page_config(page_title="Job Search Tool", page_icon="🔍", layout="wide")
 
@@ -41,11 +42,18 @@ if submitted:
                 if not jobs.empty:
                     st.success(f"Found {len(jobs)} jobs!")
                     
-                    jobs['salary_range'] = jobs.apply(
-                        lambda row: f"${row['min_amount']:,.0f} - ${row['max_amount']:,.0f}" 
-                        if (row['min_amount'] and row['max_amount']) else "N/A", 
-                        axis=1
-                    )
+                    def format_salary(row):
+                        min_val = row.get('min_amount')
+                        max_val = row.get('max_amount')
+                        
+                        if pd.notnull(min_val) and pd.notnull(max_val):
+                            return f"${min_val:,.0f} - ${max_val:,.0f}"
+                        elif pd.notnull(min_val):
+                            return f"${min_val:,.0f}+"
+                        else:
+                            return "Not Disclosed"
+
+                    jobs['salary_range'] = jobs.apply(format_salary, axis=1)
                     
                     cols = ['title', 'company', 'location', 'salary_range', 'is_remote', 'job_url'] 
                     display_df = jobs[[c for c in cols if c in jobs.columns]]
@@ -61,7 +69,7 @@ if submitted:
                         use_container_width=True
                     )
                 else:
-                    st.info("No jobs found matching your criteria.")
+                    st.info("No jobs found matching your criteria. Try adjusting your filters.")
             
             except Exception as e:
                 st.error(f"An error occurred: {e}")
