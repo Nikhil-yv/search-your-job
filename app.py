@@ -81,7 +81,18 @@ if submitted:
         st.warning("Please provide a Job Title and a Location (or check USA/Remote).")
 
 st.markdown("---")
+
+st.divider()
+
 st.markdown(
-    "<div style='text-align: center; color: grey;'>By Nikhil Elpula</div>", 
+"""
+    <div style='text-align: center; color: #808080;'>
+        <p> Developed by <b>Nikhil Elpula</b></p>
+        <p>
+            <a href="https://www.linkedin.com/in/nikhil-elpula-6686a9180/" style='color: #4A90E2; text-decoration: none;'>LinkedIn</a> | 
+            <a href="https://nikhil-yv.github.io/nikhil-yv/" style='color: #4A90E2; text-decoration: none;'>Portfolio</a> | 
+        </p>
+    </div>
+    """, 
     unsafe_allow_html=True
 )
