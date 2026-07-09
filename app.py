@@ -5,13 +5,12 @@ import pandas as pd
 st.set_page_config(page_title="Job Search Tool", page_icon="🔍", layout="wide")
 
 st.title("🔍 Job Search Tool")
-st.markdown("Find the latest job postings from top platforms.")
 
 with st.sidebar:
     st.header("Filters")
     with st.form("search_form"):
-        search_keyword = st.text_input("Job Title", placeholder="e.g. Data Scientist")
-        location = st.text_input("Location", placeholder="e.g. New York")
+        search_keyword = st.text_input("Job Title", placeholder="e.g. UI Engineer")
+        location = st.text_input("Location", placeholder="e.g. Florida, USA")
         
         col1, col2 = st.columns(2)
         with col1:
@@ -49,7 +48,6 @@ if submitted:
                     def format_salary(row):
                         min_val = row.get('min_amount')
                         max_val = row.get('max_amount')
-                        
                         if pd.notnull(min_val) and pd.notnull(max_val):
                             return f"${min_val:,.0f} - ${max_val:,.0f}"
                         elif pd.notnull(min_val):
@@ -58,7 +56,6 @@ if submitted:
                             return "Not Disclosed"
 
                     jobs['salary_range'] = jobs.apply(format_salary, axis=1)
-                    
                     cols = ['title', 'company', 'location', 'salary_range', 'is_remote', 'job_url'] 
                     display_df = jobs[[c for c in cols if c in jobs.columns]]
                     
@@ -80,14 +77,11 @@ if submitted:
     else:
         st.warning("Please provide a Job Title and a Location (or check USA/Remote).")
 
-st.markdown("---")
-
 st.divider()
-
 st.markdown(
-"""
+    """
     <div style='text-align: center; color: #808080;'>
-        <p> Developed by <b>Nikhil Elpula</b></p>
+        <p>Developed by <b>Nikhil Elpula</b></p>
         <p>
             <a href="https://www.linkedin.com/in/nikhil-elpula-6686a9180/" style='color: #4A90E2; text-decoration: none;'>LinkedIn</a> | 
             <a href="https://nikhil-yv.github.io/nikhil-yv/" style='color: #4A90E2; text-decoration: none;'>Portfolio</a> | 
