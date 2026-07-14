@@ -4,13 +4,12 @@ import pandas as pd
 
 st.set_page_config(page_title="Job Search Tool", page_icon="🔍", layout="wide")
 st.title("🔍 Job Search Tool")
+
 st.markdown(
     """
-    <div style='background-color: #f0f2f6; padding: 15px; border-radius: 10px;'>
-        <p style='margin: 0; font-weight: 500;'>
-            Live Job Listings: Indeed | Monster | LinkedIn
-        </p>
-    </div>
+    <p style='font-size: 1.1rem; color: #555555; margin-top: 1rem;'>
+    This list displays jobs from Indeed, Monster, and LinkedIn posted in the last 72 hours.
+    </p>
     """, 
     unsafe_allow_html=True
 )
