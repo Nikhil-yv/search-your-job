@@ -3,9 +3,15 @@ from jobspy import scrape_jobs
 import pandas as pd
 
 st.set_page_config(page_title="Job Search Tool", page_icon="🔍", layout="wide")
-
 st.title("🔍 Job Search Tool")
-st.subheader("All the jobs posted in the last 72 hours from Indeed, Monster and LinkedIn")
+st.markdown(
+    """
+    <p style='font-size: 1.2rem; color: #555555; margin-top: -1rem;'>
+    View the latest job postings from Indeed, Monster, and LinkedIn from the last 72 hours.
+    </p>
+    """, 
+    unsafe_allow_html=True
+)
 
 with st.sidebar:
     st.header("Filters")
