@@ -5,6 +5,7 @@ import pandas as pd
 st.set_page_config(page_title="Job Search Tool", page_icon="🔍", layout="wide")
 
 st.title("🔍 Job Search Tool")
+st.subheader("All the jobs posted in the last 72 hours from Indeed, Monster and LinkedIn")
 
 with st.sidebar:
     st.header("Filters")
